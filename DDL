@@ -1,0 +1,53 @@
+-- Таблица "Пользователь"
+CREATE TABLE Пользователь (
+    ID_пользователя SERIAL PRIMARY KEY,
+    Имя VARCHAR(100) NOT NULL,
+    Фамилия VARCHAR(100) NOT NULL,
+    Электронная_почта VARCHAR(100) NOT NULL UNIQUE,
+    Дата_регистрации DATE NOT NULL
+);
+
+-- Таблица "Семья"
+CREATE TABLE Семья (
+    ID_семьи SERIAL PRIMARY KEY,
+    Название_семьи VARCHAR(100) NOT NULL
+);
+
+-- Таблица "Катюегория"
+CREATE TABLE Категория (
+    ID_категории SERIAL PRIMARY KEY,
+    Наименование_категории VARCHAR(100) NOT NULL,
+    Тип VARCHAR(10) CHECK (Тип IN ('Доход', 'Расход')) NOT NULL
+);
+
+-- Таблица "Бюджетная_цель"
+CREATE TABLE Бюджетная_цель (
+    ID_цели SERIAL PRIMARY KEY,
+    Сумма_цели DECIMAL(10, 2) NOT NULL CHECK (Сумма_цели >= 0),
+    Тип_цели VARCHAR(50) NOT NULL,
+    Период VARCHAR(50) NOT NULL,
+    Категория_цели INT REFERENCES Категория(ID_категории),
+    Дата_начала DATE NOT NULL,
+    Дата_окончания DATE NOT NULL
+);
+
+-- Таблица "Транзакция"
+CREATE TABLE Транзакция (
+    ID_транзакции SERIAL PRIMARY KEY,
+    Сумма DECIMAL(10, 2) NOT NULL,
+    Дата_транзакции DATE NOT NULL,
+    Тип_транзакции VARCHAR(10) CHECK (Тип_транзакции IN ('Доход', 'Расход')) NOT NULL,
+    ID_категории INT REFERENCES Категория(ID_категории)
+);
+-- Связь "Принадлежит" (Пользователь <M:1> Семья)
+ALTER TABLE Пользователь
+ADD COLUMN ID_семьи INT REFERENCES Семья(ID_семьи);
+
+-- Связь "Устанавливает" (Пользователь <1:M> Бюджетная_цель)
+ALTER TABLE Бюджетная_цель
+ADD COLUMN ID_пользователя INT REFERENCES Пользователь(ID_пользователя);
+
+-- Связь "Выполняет" (Пользователь <1:M> Транзакция)
+ALTER TABLE Транзакция
+ADD COLUMN ID_пользователя INT REFERENCES Пользователь(ID_пользователя);
+

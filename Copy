@@ -1,0 +1,16 @@
+
+--создание резервной копии
+
+COPY Транзакция TO 'D:/transaction.csv' WITH (FORMAT CSV, HEADER, ENCODING 'WIN1251');
+COPY Пользователь TO 'D:/user.csv' WITH (FORMAT CSV, HEADER, ENCODING 'WIN1251');
+COPY Семья TO 'D:/family.csv' WITH (FORMAT CSV, HEADER, ENCODING 'WIN1251');
+COPY Бюджетная_цель TO 'D:/purpose.csv' WITH (FORMAT CSV, HEADER, ENCODING 'WIN1251');
+COPY Категория TO 'D:/category.csv' WITH (FORMAT CSV, HEADER, ENCODING 'WIN1251');
+
+
+-- восстановление данных в необходиом порядке
+COPY "Категория" FROM 'D:/category.csv' WITH (FORMAT CSV, HEADER, ENCODING 'WIN1251');
+COPY "Семья" FROM 'D:/family.csv' WITH (FORMAT CSV, HEADER, ENCODING 'WIN1251');
+COPY "Пользователь" FROM 'D:/user.csv' WITH (FORMAT CSV, HEADER, ENCODING 'WIN1251');
+COPY "Бюджетная_цель" FROM 'D:/purpose.csv' WITH (FORMAT CSV, HEADER, ENCODING 'WIN1251');
+COPY "Транзакция" FROM 'D:/transaction.csv' WITH (FORMAT CSV, HEADER, ENCODING 'WIN1251');
